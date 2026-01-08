@@ -1,0 +1,111 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Inter", sans-serif;
+  background: #f2f4f8;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 420px;
+  margin: 60px auto;
+  background: #ffffff;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+h1 {
+  margin-bottom: 16px;
+  text-align: center;
+  font-weight: 600;
+}
+
+/* 入力エリア */
+.input-area {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.input-area input {
+  flex: 1;
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.input-area button {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  background: #2563eb;
+  color: white;
+  cursor: pointer;
+}
+
+.input-area button:hover {
+  background: #1d4ed8;
+}
+
+/* フィルタ */
+.filters {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.filters button {
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid #ccc;
+  background: #fff;
+  cursor: pointer;
+}
+
+.filters button.active {
+  background: #2563eb;
+  color: white;
+  border-color: #2563eb;
+}
+
+/* タスク一覧 */
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.task-text {
+  flex: 1;
+}
+
+/* 完了タスク */
+li.done .task-text {
+  text-decoration: line-through;
+  color: #9ca3af;
+}
+
+/* 削除ボタン */
+li button {
+  background: none;
+  border: none;
+  color: #ef4444;
+  cursor: pointer;
+}
+
+li button:hover {
+  text-decoration: underline;
+}
