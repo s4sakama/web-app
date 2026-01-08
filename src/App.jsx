@@ -2,24 +2,24 @@ import { useEffect, useState } from "react";
 import { loadTasks, saveTasks } from "./storage";
 
 function App() {
-  const [tasks, setTasks] = useState([]);
+  const [tasks, setTasks] = useState(() => loadTasks());
   const [text, setText] = useState("");
   const [filter, setFilter] = useState("all");
 
-  // 初回のみ localStorage から読み込み
-  useEffect(() => {
-    setTasks(loadTasks());
-  }, []);
-
-  // tasks が変わるたびに保存
+  // tasks が変わるたびに保存 (初回マウント時も実行される)
   useEffect(() => {
     saveTasks(tasks);
   }, [tasks]);
 
   const addTask = () => {
     if (!text.trim()) return;
-    setTasks([...tasks, { id: Date.now(), text, completed: false }]);
+    setTasks([...tasks, { id: crypto.randomUUID(), text, completed: false }]);
     setText("");
+  };
+
+  // Enterキーでの追加対応
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") addTask();
   };
 
   const toggleTask = (id) => {
@@ -50,6 +50,7 @@ function App() {
         <input
           value={text}
           onChange={e => setText(e.target.value)}
+          onKeyDown={handleKeyDown}
           placeholder="タスクを入力"
         />
         <button onClick={addTask}>追加</button>
@@ -78,10 +79,7 @@ function App() {
 
       <ul>
         {filteredTasks.map(task => (
-          <li
-            key={task.id}
-            className={task.completed ? "done" : ""}
-          >
+          <li key={task.id} className={task.completed ? "done" : ""}>
             <input
               type="checkbox"
               checked={task.completed}
@@ -92,6 +90,10 @@ function App() {
           </li>
         ))}
       </ul>
+
+      {filteredTasks.length === 0 && (
+        <p className="empty">タスクがありません</p>
+      )}
     </div>
   );
 }
