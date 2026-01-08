@@ -109,3 +109,10 @@ li button {
 li button:hover {
   text-decoration: underline;
 }
+
+.empty {
+  text-align: center;
+  color: #9ca3af;
+  font-size: 14px;
+  margin-top: 12px;
+}
