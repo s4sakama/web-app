@@ -118,3 +118,17 @@ li button:hover {
   font-size: 14px;
   margin-top: 12px;
 }
+
+/* 優先度ごとに色分け */
+.priority-high {
+  color: #dc2626; /* 赤 */
+  font-weight: 600;
+}
+
+.priority-medium {
+  color: #2563eb; /* 青 */
+}
+
+.priority-low {
+  color: #6b7280; /* グレー */
+}

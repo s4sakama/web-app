@@ -5,6 +5,7 @@ function App() {
   const [tasks, setTasks] = useState(() => loadTasks());
   const [text, setText] = useState("");
   const [filter, setFilter] = useState("all");
+  const [priority, setPriority] = useState("medium");
 
   // tasks が変わるたびに保存 (初回マウント時も実行される)
   useEffect(() => {
@@ -13,8 +14,16 @@ function App() {
 
   const addTask = () => {
     if (!text.trim()) return;
-    setTasks([...tasks, { id: crypto.randomUUID(), text, completed: false }]);
+    setTasks([...tasks, 
+      {
+        id: crypto.randomUUID(), 
+        text, 
+        completed: false,
+        priority
+      }
+    ]);
     setText("");
+    setPriority("medium")
   };
 
   // Enterキーでの追加対応
@@ -53,6 +62,16 @@ function App() {
           onKeyDown={handleKeyDown}
           placeholder="タスクを入力"
         />
+
+        <select
+          value={priority}
+          onChange={e => setPriority(e.target.value)}
+        >
+          <option value="high">高</option>
+          <option value="medium">中</option>
+          <option value="low">低</option>
+        </select>
+
         <button onClick={addTask}>追加</button>
       </div>
 
@@ -85,7 +104,16 @@ function App() {
               checked={task.completed}
               onChange={() => toggleTask(task.id)}
             />
+            
             <span className="task-text">{task.text}</span>
+            <span className={`priority-label priority-${task.priority}`}>
+              {task.priority === "high"
+                ? "高"
+                : task.priority === "medium"
+                ? "中"
+                : "低"}
+            </span>
+
             <button onClick={() => removeTask(task.id)}>削除</button>
           </li>
         ))}
