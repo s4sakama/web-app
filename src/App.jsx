@@ -78,104 +78,104 @@ const sortedTasks = filteredTasks.slice().sort((a, b) => {
 });
 
   return (
-    <div className="container">
-      <h1>タスク管理アプリ</h1>
+    <div className="app">
+      <header className="header">
+        <h1>タスク管理アプリ</h1>
+      </header>
 
-      <div className="input-area">
-        <input
-          value={text}
-          onChange={e => setText(e.target.value)}
-          onKeyDown={handleKeyDown}
-          placeholder="タスクを入力"
-        />
+      <main className="container">
+        <div className="input-area">
+          <input
+            value={text}
+            onChange={e => setText(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder="タスクを入力"
+          />
 
-        <input
-          type="date"
-          value={dueDate}
-          onChange={e => setDueDate(e.target.value)}
-        />
+          <input
+            type="date"
+            value={dueDate}
+            onChange={e => setDueDate(e.target.value)}
+          />
 
-        <select
-          value={priority}
-          onChange={e => setPriority(e.target.value)}
-        >
-          <option value="high">高</option>
-          <option value="medium">中</option>
-          <option value="low">低</option>
-        </select>
+          <select
+            value={priority}
+            onChange={e => setPriority(e.target.value)}
+          >
+            <option value="high">高</option>
+            <option value="medium">中</option>
+            <option value="low">低</option>
+          </select>
 
-        <button onClick={addTask}>追加</button>
-      </div>
+          <button onClick={addTask}>追加</button>
+        </div>
 
-      <div className="filters">
-        <button
-          className={filter === "all" ? "active" : ""}
-          onClick={() => setFilter("all")}
-        >
-          すべて
-        </button>
-        <button
-          className={filter === "active" ? "active" : ""}
-          onClick={() => setFilter("active")}
-        >
-          未完了
-        </button>
-        <button
-          className={filter === "completed" ? "active" : ""}
-          onClick={() => setFilter("completed")}
-        >
-          完了
-        </button>
-      </div>
+        <div className="filters">
+          <button
+            className={filter === "all" ? "active" : ""}
+            onClick={() => setFilter("all")}
+          >
+            すべて
+          </button>
+          <button
+            className={filter === "active" ? "active" : ""}
+            onClick={() => setFilter("active")}
+          >
+            未完了
+          </button>
+          <button
+            className={filter === "completed" ? "active" : ""}
+            onClick={() => setFilter("completed")}
+          >
+            完了
+          </button>
+        </div>
 
-      <ul>
-        {filteredTasks.map(task => {
-          const isExpired =
-            task.dueDate &&
-            !task.completed &&
-            new Date(task.dueDate) < new Date();
-      
-          return (
-            <li 
-              key={task.id} 
-              className={`
-                ${task.completed ? "done" : ""}
-                ${isExpired ? "expired" : ""}
-              `}
-            >
-              <input
-                type="checkbox"
-                checked={task.completed}
-                onChange={() => toggleTask(task.id)}
-              />
+        <ul>
+          {filteredTasks.map(task => {
+            const isExpired =
+              task.dueDate &&
+              !task.completed &&
+              new Date(task.dueDate) < new Date();
+        
+            return (
+              <li 
+                key={task.id} 
+                className={`
+                  ${task.completed ? "done" : ""}
+                  ${isExpired ? "expired" : ""}
+                `}
+              >
+                <input
+                  type="checkbox"
+                  checked={task.completed}
+                  onChange={() => toggleTask(task.id)}
+                />
 
-              <span className="task-text">{task.text}</span>
-
-              <span className={`priority-label priority-${task.priority}`}>
-                {task.priority === "high"
-                  ? "高"
-                 : task.priority === "medium"
-                 ? "中"
-                 : "低"}
-              </span>
-
-              {task.dueDate && (
-                <span className="due-date">
-                 {task.dueDate}
+                <span className={`task-text priority-${task.priority}`}>
+                  {task.text}
                 </span>
-              )}
 
-              {isExpired && <span className="expired-icon">⚠</span>}
+                {task.dueDate && (
+                  <span className="due-date">{task.dueDate}</span>
+                )}
 
-              <button onClick={() => removeTask(task.id)}>削除</button>
-            </li>
-          );
-        })}
-      </ul>
+                {isExpired && <span className="expired-icon">⚠</span>}
 
-      {filteredTasks.length === 0 && (
-        <p className="empty">タスクがありません</p>
-      )}
+                <button onClick={() => removeTask(task.id)}>削除</button>
+              </li>
+            );
+          })}
+        </ul>
+
+        {filteredTasks.length === 0 && (
+          <p className="empty">タスクがありません</p>
+        )}
+      </main>
+
+      <footer className="footer">
+        <small>Task Manager</small>
+      </footer>
     </div>
   );
 }
