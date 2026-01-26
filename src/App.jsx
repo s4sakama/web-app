@@ -6,6 +6,7 @@ function App() {
   const [text, setText] = useState("");
   const [filter, setFilter] = useState("all");
   const [priority, setPriority] = useState("medium");
+  const [dueDate, setDueDate] = useState("");
 
   // tasks が変わるたびに保存 (初回マウント時も実行される)
   useEffect(() => {
@@ -14,16 +15,19 @@ function App() {
 
   const addTask = () => {
     if (!text.trim()) return;
+
     setTasks([...tasks, 
       {
         id: crypto.randomUUID(), 
         text, 
         completed: false,
-        priority
+        priority, 
+        dueDate
       }
     ]);
     setText("");
     setPriority("medium")
+    setDueDate("");
   };
 
   // Enterキーでの追加対応
@@ -51,6 +55,28 @@ function App() {
     return true;
   });
 
+  const today = new Date().toISOString().slice(0, 10);
+
+  const priorityOrder = {
+  high: 0,
+  medium: 1,
+  low: 2
+};
+
+const sortedTasks = filteredTasks.slice().sort((a, b) => {
+  if (a.completed !== b.completed) {
+    return a.completed - b.completed;
+  }
+
+  if (a.dueDate && b.dueDate) {
+    if (a.dueDate !== b.dueDate) {
+      return a.dueDate.localeCompare(b.dueDate);
+    }
+  }
+
+  return priorityOrder[a.priority] - priorityOrder[b.priority];
+});
+
   return (
     <div className="container">
       <h1>タスク管理アプリ</h1>
@@ -61,6 +87,12 @@ function App() {
           onChange={e => setText(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder="タスクを入力"
+        />
+
+        <input
+          type="date"
+          value={dueDate}
+          onChange={e => setDueDate(e.target.value)}
         />
 
         <select
@@ -97,26 +129,48 @@ function App() {
       </div>
 
       <ul>
-        {filteredTasks.map(task => (
-          <li key={task.id} className={task.completed ? "done" : ""}>
-            <input
-              type="checkbox"
-              checked={task.completed}
-              onChange={() => toggleTask(task.id)}
-            />
-            
-            <span className="task-text">{task.text}</span>
-            <span className={`priority-label priority-${task.priority}`}>
-              {task.priority === "high"
-                ? "高"
-                : task.priority === "medium"
-                ? "中"
-                : "低"}
-            </span>
+        {filteredTasks.map(task => {
+          const isExpired =
+            task.dueDate &&
+            !task.completed &&
+            new Date(task.dueDate) < new Date();
+      
+          return (
+            <li 
+              key={task.id} 
+              className={`
+                ${task.completed ? "done" : ""}
+                ${isExpired ? "expired" : ""}
+              `}
+            >
+              <input
+                type="checkbox"
+                checked={task.completed}
+                onChange={() => toggleTask(task.id)}
+              />
 
-            <button onClick={() => removeTask(task.id)}>削除</button>
-          </li>
-        ))}
+              <span className="task-text">{task.text}</span>
+
+              <span className={`priority-label priority-${task.priority}`}>
+                {task.priority === "high"
+                  ? "高"
+                 : task.priority === "medium"
+                 ? "中"
+                 : "低"}
+              </span>
+
+              {task.dueDate && (
+                <span className="due-date">
+                 {task.dueDate}
+                </span>
+              )}
+
+              {isExpired && <span className="expired-icon">⚠</span>}
+
+              <button onClick={() => removeTask(task.id)}>削除</button>
+            </li>
+          );
+        })}
       </ul>
 
       {filteredTasks.length === 0 && (

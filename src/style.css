@@ -132,3 +132,24 @@ li button:hover {
 .priority-low {
   color: #6b7280; /* グレー */
 }
+
+.overdue {
+  color: #dc2626;
+  font-weight: 600;
+}
+
+li.expired {
+  background-color: #fff3f3;
+  border-left: 4px solid #e53935;
+}
+
+li.expired .due-date {
+  color: #e53935;
+  font-weight: bold;
+}
+
+.expired-icon {
+  margin-left: 0.5em;
+  color: #e53935;
+  font-size: 1.1em;
+}
